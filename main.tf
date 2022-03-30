@@ -15,7 +15,7 @@ terraform {
     organization = "slopeit"
 
     workspaces {
-      name = "webserver"
+      name = "demo-github-cttions"
     }
   }
 }
