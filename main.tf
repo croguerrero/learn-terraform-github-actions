@@ -36,7 +36,7 @@ resource "aws_instance" "web" {
 
   user_data = <<-EOF
               #!/bin/bash
-              echo "Hello, Slope-IT UP and RUN" > index.html
+              echo "Apply Slope" > index.html
               nohup busybox httpd -f -p 8080 &
               EOF
 }
