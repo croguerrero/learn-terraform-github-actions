@@ -34,20 +34,14 @@ resource "aws_instance" "web" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.web-sg.id]
 
-  user_data = <<-EOF
-              #!/bin/bash
-              git clone https://github.com/croguerrero/personalweb.git
-              cd personalweb
-              sh installdocker.sh
-              sh publish.sh
-              EOF
+  user_data = "${file("installapache.sh")}"
 }
 
 resource "aws_security_group" "web-sg" {
   name = "${random_pet.sg.id}-sg"
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 80 , 22
+    to_port     = 80 , 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
