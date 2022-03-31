@@ -36,21 +36,23 @@ resource "aws_instance" "web" {
 
   user_data = <<-EOF
               #!/bin/bash
-              echo "Apply Slope" > index.html
-              nohup busybox httpd -f -p 8080 &
+              git clone https://github.com/croguerrero/personalweb.git
+              cd personalweb
+              sh installdocker.sh
+              sh publish.sh
               EOF
 }
 
 resource "aws_security_group" "web-sg" {
   name = "${random_pet.sg.id}-sg"
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
 output "web-address" {
-  value = "${aws_instance.web.public_dns}:8080"
+  value = "${aws_instance.web.public_dns}:80"
 }
