@@ -12,10 +12,10 @@ terraform {
   required_version = "~> 1.0"
 
   backend "remote" {
-    organization = "slopeit"
+    organization = "REPLACE_ME"
 
     workspaces {
-      name = "demo-github-cttions"
+      name = "REPLACE_ME"
     }
   }
 }
@@ -26,7 +26,6 @@ provider "aws" {
 }
 
 
-
 resource "random_pet" "sg" {}
 
 resource "aws_instance" "web" {
@@ -34,25 +33,26 @@ resource "aws_instance" "web" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.web-sg.id]
 
-   user_data = <<-EOF
+  user_data = <<-EOF
               #!/bin/bash
-	      sleep 120 
-              git clone https://github.com/croguerrero/personalweb.git
+	      sleep 120
+	      sudo apt-get update
+	      git clone https://github.com/croguerrero/personalweb.git
               cd personalweb
-	      sh installdocker.sh	      
+	      sh installdocker.sh
               EOF
 }
 
 resource "aws_security_group" "web-sg" {
   name = "${random_pet.sg.id}-sg"
   ingress {
-    from_port   = 80 
-    to_port     = 80 
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
 output "web-address" {
-  value = "${aws_instance.web.public_dns}:80"
+  value = "${aws_instance.web.public_dns}:8080"
 }
